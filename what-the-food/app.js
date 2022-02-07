@@ -24,6 +24,6 @@ models.sequelize.sync({ force: true }).then(function() {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/recipes', recipesRouter);
-app.use('/ingredientsRouter', ingredientsRouter);
+app.use('/ingredients', ingredientsRouter);
 
 module.exports = app;

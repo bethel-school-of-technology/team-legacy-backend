@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { Ingredients } = require('../models');
+//const { Ingredients } = require('../models');
 
 
 /* GET Recipes listing. */

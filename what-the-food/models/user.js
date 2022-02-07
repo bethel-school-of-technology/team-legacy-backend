@@ -42,13 +42,5 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
   });
 
-  // User.hasMany(Ingredients, {
-  //   foreignKey: 'userId'
-  // });
-  // Ingredients.belongsTo(User);
-
-  // User.hasMany(Ingredients, {foreignKey : 'userId'});
-  // Ingredients.belongsTo(User, {foreignKey : 'userId'});
-
   return User;
 };

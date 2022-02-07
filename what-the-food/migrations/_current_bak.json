@@ -30,15 +30,15 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "UserId": {
+                "userId": {
                     "allowNull": true,
                     "references": {
                         "model": "Users",
-                        "key": "UserId"
+                        "key": "userId"
                     },
                     "onDelete": "SET NULL",
                     "onUpdate": "CASCADE",
-                    "field": "UserId",
+                    "field": "userId",
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -80,11 +80,11 @@
         "Users": {
             "tableName": "Users",
             "schema": {
-                "UserId": {
+                "userId": {
                     "allowNull": false,
                     "autoIncrement": true,
                     "primaryKey": true,
-                    "field": "UserId",
+                    "field": "userId",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "firstName": {
@@ -120,45 +120,7 @@
                 }
             },
             "indexes": []
-        },
-        "ingredients_recipes": {
-            "tableName": "ingredients_recipes",
-            "schema": {
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "ingredientId": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "Ingredients",
-                        "key": "ingredientId"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "ingredientId",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "recipeId": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "Recipes",
-                        "key": "recipeId"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "recipeId",
-                    "seqType": "Sequelize.INTEGER"
-                }
-            },
-            "indexes": []
         }
     },
-    "revision": 2
+    "revision": 1
 }
