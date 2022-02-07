@@ -1,3 +1,6 @@
+// const Sequelize = require('sequelize');
+// const { Ingredients } = require('./ingredients');
+
 'use strict';
 const {
   Model
@@ -5,11 +8,13 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // define association here
+        User.hasMany(models.Ingredients, {
+          foreignKey: "UserId"
+        })
     }
   }
   User.init({
-    userId: {
+    UserId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
@@ -36,5 +41,14 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
   });
+
+  // User.hasMany(Ingredients, {
+  //   foreignKey: 'userId'
+  // });
+  // Ingredients.belongsTo(User);
+
+  // User.hasMany(Ingredients, {foreignKey : 'userId'});
+  // Ingredients.belongsTo(User, {foreignKey : 'userId'});
+
   return User;
 };
