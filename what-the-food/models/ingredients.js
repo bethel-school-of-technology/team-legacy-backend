@@ -5,10 +5,16 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Ingredients extends Model {
 
-    static associate(models) {
-      Ingredients.belongsTo(models.User,  {
-        foreignKey: "UserId",
-        targetKey: "UserId"
+    static associate(models) { //oneIngredient hasMany
+      // Ingredients.belongsTo(models.User,  {
+      //   foreignKey: "UserId",
+      //   targetKey: "UserId"
+      // });
+
+      Ingredients.belongsToMany(models.User, {
+        through: "ingredients_user",
+        as: "User",
+        foreignKey: "ingredientId",
       });
 
       Ingredients.belongsToMany(models.Recipes, {

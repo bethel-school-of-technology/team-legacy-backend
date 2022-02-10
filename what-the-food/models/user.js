@@ -8,9 +8,14 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-        User.hasMany(models.Ingredients, {
-          foreignKey: "UserId"
-        })
+        // User.hasMany(models.Ingredients, {
+        //   foreignKey: "UserId"
+        // })
+        User.belongsToMany(models.Ingredients, {
+          through: "ingredients_user",
+          as: "Ingredients",
+          foreignKey: "UserId",
+        });
     }
   }
   User.init({
