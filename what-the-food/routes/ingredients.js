@@ -8,18 +8,20 @@ const models = require('../models');
 //   let token = req.cookies.jwt; //req.header.jwt (check with Jan if Andrew or Rickey need something different.)
 //   if (token) {
 //     authService.verifyUser(token)
-//       .next
-//       (ingredient => {
-//         if (ingredient) {
-//           res.send(JSON.stringify(ingredient));
-//         }
-//          else {
+//       .then(user => {
+//         if (user) {
+//           res.send(JSON.stringify(user));
+//         } else {
 //           res.status(401);
 //           res.send('Invalid authentication token');
 //         }
 //       });
+//   } else {
+//     res.status(401);
+//     res.send('Must be logged in');
 //   }
-// }
+// };
+
 
 // GET list of ingredients in pantry. I want it to be connected to individual user & must be authorized
 router.get('/', function(req, res) {
@@ -59,51 +61,32 @@ router.get('/', function(req, res) {
     let ingredientId = parseInt(req.params.id);
     models.Ingredients
       .update(req.body, { where: { ingredientId: ingredientId } })
-      .then(res.redirect('/ingredients')) //A message saying updated complete
-      .catch(err => {
-        res.status(400);
-        res.send("There was a problem updating the ingredient.  Please check the ingredient information.");
-      });
-  });
+      .then(
+        res.send("The ingredient has been updated."));
+    })
 
-//GET Ingredients by ID <- This does not work!! It almost works but is missing something
+
+//GET Ingredients by ID <- This does work!!
 router.get('/:id', function(req, res, next) {
+  let ingredientId = parseInt(req.params.id);
   models.Ingredients
-    .findByPk(parseInt(req.params.id), { 
-      include: [{ model: models.Ingredients }]
-    })
-    .then(ingredientFound => {
-      res.setHeader('Content-Type', 'application/json');
-      res.redirect(JSON.stringify(ingredientFound));
-    })
+  .findOne({
+    where: {
+      ingredientId: ingredientId
+    }
+  })
+  .then(ingredient => {
+    res.json(ingredient);
+  });
 });
 
 //DELETE Delete ingredient by ID <- gives 404 error
 router.delete('/delete/:id', function(req, res) {
   let ingredientId = parseInt(req.params.id);
     models.Ingredients
-    .delete(
-        { ingredientId: req.body.ingredientId, 
-          ingredient: req.body.ingredient, 
-          ingredientQuantity: req.body.ingredientQuantity},
+    .destroy(
         { where: { ingredientId: ingredientId } })
-    .then(res.redirect('/ingredients'));
+    .then(res.send('Ingredient has successfully been deleted.'));
 });
 
   module.exports = router;
-
-//   router.post('/', function(req, res) {
-//   res.send('You successfully created a POST route!');
-// });
-
-// router.get('/', function(req, res) {
-//   res.send('You successfully created a GET route!');
-// });
-
-// router.put('/', function(req, res) {
-//   res.send('You successfully created a PUT route!');
-// });
-
-// router.delete('/', function(req, res) {
-//   res.send('You successfully created a DELETE route!');
-// });
