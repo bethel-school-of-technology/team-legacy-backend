@@ -78,7 +78,7 @@ router.post('/login', function (req, res, next) {
       if (passwordMatch) {
         let token = authService.signUser(user);
         res.cookie('jwt', token);
-        res.send({
+        res.json({
           message: "Login Successful.",
           token: token
         });
