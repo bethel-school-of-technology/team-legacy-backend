@@ -36,7 +36,7 @@ router.get('/', function(req, res) {
 
   //POST Add Ingredient to DB <- This route works!
   router.post('/add', function (req, res, next) {
-    models.Ingredients
+   models.Ingredients
       .findOrCreate({
         where: {
           ingredient: req.body.ingredient
@@ -84,9 +84,46 @@ router.get('/:id', function(req, res, next) {
 router.delete('/delete/:id', function(req, res) {
   let ingredientId = parseInt(req.params.id);
     models.Ingredients
-    .destroy(
+    .update({Deleted: true},
         { where: { ingredientId: ingredientId } })
     .then(res.send('Ingredient has successfully been deleted.'));
+});
+
+//GET ALL ingredients:/ID
+router.get('/every/:id', function(req, res, next) {
+  let ingredientId = parseInt(req.params.id);
+  models.Ingredients.findByPk(ingredientId, {
+    include: [
+      {
+        model: models.Recipes,
+        as: models.Ingredients,
+        attributes: ["recipeName", "recipeLink"],
+        through: {
+          attributes: ["ingredientId", "recipeId"],
+        },
+      },
+    ],
+  })
+
+  // models.Ingredients
+  // .findAll({
+  //   where: {
+  //     ingredientId: ingredientId
+  //   },
+  //   include: 
+  //   [
+  //     {
+  //       model: models.Recipes,
+  //       as: Recipes,
+  //       where: {Deleted: false},
+  //       required: false
+  //     }
+  //   ]
+  //})
+  .then(recipesFound => {
+    console.log(recipesFound)
+    res.json(recipesFound);
+  });
 });
 
   module.exports = router;

@@ -1,6 +1,3 @@
-// const Sequelize = require('sequelize');
-// const { Ingredients } = require('./ingredients');
-
 'use strict';
 const {
   Model
@@ -41,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    Deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
   }, {
     sequelize,

@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     recipeLink: { type: DataTypes.STRING,
       allowNull: false
     },
+    Deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
   }, {
     sequelize,
     modelName: 'Recipes',

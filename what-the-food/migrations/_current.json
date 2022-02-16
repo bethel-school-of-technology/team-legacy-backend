@@ -20,6 +20,29 @@
                     "field": "ingredientQuantity",
                     "seqType": "Sequelize.INTEGER"
                 },
+                "Deleted": {
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "Deleted",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "ingredients_recipes": {
+            "tableName": "ingredients_recipes",
+            "schema": {
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -30,16 +53,90 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
+                "ingredientId": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Ingredients",
+                        "key": "ingredientId"
+                    },
+                    "field": "ingredientId",
+                    "unique": "ingredients_recipes_recipeId_ingredientId_unique",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "recipeId": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Recipes",
+                        "key": "recipeId"
+                    },
+                    "field": "recipeId",
+                    "unique": "ingredients_recipes_recipeId_ingredientId_unique",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "ingredients_user": {
+            "tableName": "ingredients_user",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "ingredientId": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Ingredients",
+                        "key": "ingredientId"
+                    },
+                    "field": "ingredientId",
+                    "unique": "ingredients_user_UserId_ingredientId_unique",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "UserId": {
-                    "allowNull": true,
+                    "allowNull": false,
+                    "primaryKey": true,
                     "references": {
                         "model": "Users",
                         "key": "UserId"
                     },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
                     "field": "UserId",
+                    "unique": "ingredients_user_UserId_ingredientId_unique",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
                     "seqType": "Sequelize.INTEGER"
+                },
+                "quantityByUser": {
+                    "allowNull": true,
+                    "field": "quantityByUser",
+                    "seqType": "Sequelize.DECIMAL"
+                },
+                "ingredient": {
+                    "allowNull": false,
+                    "field": "ingredient",
+                    "seqType": "Sequelize.STRING"
+                },
+                "Deleted": {
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "Deleted",
+                    "seqType": "Sequelize.BOOLEAN"
                 }
             },
             "indexes": []
@@ -63,6 +160,13 @@
                     "allowNull": false,
                     "field": "recipeLink",
                     "seqType": "Sequelize.STRING"
+                },
+                "Deleted": {
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "Deleted",
+                    "seqType": "Sequelize.BOOLEAN"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -108,6 +212,13 @@
                     "field": "password",
                     "seqType": "Sequelize.STRING"
                 },
+                "Deleted": {
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "Deleted",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -117,48 +228,10 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
-                }
-            },
-            "indexes": []
-        },
-        "ingredients_recipes": {
-            "tableName": "ingredients_recipes",
-            "schema": {
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "ingredientId": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "Ingredients",
-                        "key": "ingredientId"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "ingredientId",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "recipeId": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "Recipes",
-                        "key": "recipeId"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "recipeId",
-                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
         }
     },
-    "revision": 2
+    "revision": 5
 }

@@ -29,17 +29,100 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "ingredients_recipes": {
+            "tableName": "ingredients_recipes",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
                 },
-                "userId": {
-                    "allowNull": true,
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "ingredientId": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Ingredients",
+                        "key": "ingredientId"
+                    },
+                    "field": "ingredientId",
+                    "unique": "ingredients_recipes_recipeId_ingredientId_unique",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "recipeId": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Recipes",
+                        "key": "recipeId"
+                    },
+                    "field": "recipeId",
+                    "unique": "ingredients_recipes_recipeId_ingredientId_unique",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "ingredients_user": {
+            "tableName": "ingredients_user",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "ingredientId": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Ingredients",
+                        "key": "ingredientId"
+                    },
+                    "field": "ingredientId",
+                    "unique": "ingredients_user_UserId_ingredientId_unique",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "UserId": {
+                    "allowNull": false,
+                    "primaryKey": true,
                     "references": {
                         "model": "Users",
-                        "key": "userId"
+                        "key": "UserId"
                     },
-                    "onDelete": "SET NULL",
+                    "field": "UserId",
+                    "unique": "ingredients_user_UserId_ingredientId_unique",
+                    "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "field": "userId",
                     "seqType": "Sequelize.INTEGER"
+                },
+                "quantityByUser": {
+                    "allowNull": true,
+                    "field": "quantityByUser",
+                    "seqType": "Sequelize.DECIMAL"
+                },
+                "ingredient": {
+                    "allowNull": false,
+                    "field": "ingredient",
+                    "seqType": "Sequelize.STRING"
                 }
             },
             "indexes": []
@@ -80,11 +163,11 @@
         "Users": {
             "tableName": "Users",
             "schema": {
-                "userId": {
+                "UserId": {
                     "allowNull": false,
                     "autoIncrement": true,
                     "primaryKey": true,
-                    "field": "userId",
+                    "field": "UserId",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "firstName": {
@@ -122,5 +205,5 @@
             "indexes": []
         }
     },
-    "revision": 1
+    "revision": 4
 }

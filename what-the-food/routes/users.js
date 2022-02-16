@@ -9,7 +9,6 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET Load profile page  */
-
 router.get('/profile', function (req, res, next) {
   let token = req.cookies.jwt; //req.header.jwt (check with Jan if Andrew or Rickey need something different.)
   if (token) {
@@ -61,7 +60,6 @@ router.post('/signup', function (req, res, next) {
 });
 
 /* Login user and return JWT as a cookie */
-
 router.post('/login', function (req, res, next) {
   User.findOne({
     where: {
