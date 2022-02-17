@@ -36,7 +36,9 @@ router.get('/', function(req, res) {
 
   //POST Add Ingredient to DB <- This route works!
   router.post('/add', function (req, res, next) {
-   models.Ingredients
+  //  models.ingredients_user
+   
+    models.Ingredients
       .findOrCreate({
         where: {
           ingredient: req.body.ingredient
@@ -89,41 +91,27 @@ router.delete('/delete/:id', function(req, res) {
     .then(res.send('Ingredient has successfully been deleted.'));
 });
 
-//GET ALL ingredients:/ID
-router.get('/every/:id', function(req, res, next) {
+//GET ALL Recipes:/ingredientId
+router.get('/recipesbyingredient/:id', function(req, res, next) {
+  console.log('Hi from recipesbyingredient');
   let ingredientId = parseInt(req.params.id);
-  models.Ingredients.findByPk(ingredientId, {
-    include: [
-      {
-        model: models.Recipes,
-        as: models.Ingredients,
-        attributes: ["recipeName", "recipeLink"],
-        through: {
-          attributes: ["ingredientId", "recipeId"],
-        },
-      },
-    ],
+
+models.ingredients_recipes.findAll({
+  where: {ingredientId: ingredientId},
+  attributes: ['recipeId'],
+  raw : true
+}).map(result => result.recipeId)
+.then(recipeIds => {
+  
+  models.Recipes.findAll({
+    where: {
+      recipeId: recipeIds
+    }
+  }).then(recipes =>{
+    res.json(recipes);
   })
 
-  // models.Ingredients
-  // .findAll({
-  //   where: {
-  //     ingredientId: ingredientId
-  //   },
-  //   include: 
-  //   [
-  //     {
-  //       model: models.Recipes,
-  //       as: Recipes,
-  //       where: {Deleted: false},
-  //       required: false
-  //     }
-  //   ]
-  //})
-  .then(recipesFound => {
-    console.log(recipesFound)
-    res.json(recipesFound);
-  });
+})
 });
 
   module.exports = router;
