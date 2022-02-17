@@ -9,7 +9,6 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET Load profile page  */
-
 router.get('/profile', function (req, res, next) {
   let token = req.cookies.jwt; //req.header.jwt (check with Jan if Andrew or Rickey need something different.)
   if (token) {
@@ -51,17 +50,16 @@ router.post('/signup', function (req, res, next) {
         password: authService.hashPassword(req.body.password) //<--- Change to this code here
       }
     })
-    .spread(function (result, created) {
-      if (created) {
-        res.send('User successfully created');
-      } else {
-        res.send('This user already exists');
-      }
-    });
+    .then(user => {
+      res.json(user)
+    
+      }).catch(() => {
+        res.status(400).send();
+      });
+
 });
 
 /* Login user and return JWT as a cookie */
-
 router.post('/login', function (req, res, next) {
   User.findOne({
     where: {

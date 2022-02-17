@@ -7,6 +7,8 @@ var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var recipesRouter = require('./routes/recipes');
+var ingredientsRouter = require('./routes/ingredients');
 
 var app = express();
 
@@ -17,11 +19,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-models.sequelize.sync({alter: true}).then(function() {
+models.sequelize.sync({ alter: false }).then(function() {
     console.log("DB Sync'd up")
   });
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/recipes', recipesRouter);
+app.use('/ingredients', ingredientsRouter);
 
 module.exports = app;

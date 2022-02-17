@@ -5,11 +5,18 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // define association here
+        // User.hasMany(models.Ingredients, {
+        //   foreignKey: "UserId"
+        // })
+        User.belongsToMany(models.Ingredients, {
+          through: "ingredients_user",
+          as: "Ingredients",
+          foreignKey: "UserId",
+        });
     }
   }
   User.init({
-    userId: {
+    UserId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
@@ -32,9 +39,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    Deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
   }, {
     sequelize,
     modelName: 'User',
   });
+
   return User;
 };
