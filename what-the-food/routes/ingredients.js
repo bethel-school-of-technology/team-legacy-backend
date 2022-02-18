@@ -104,8 +104,8 @@ router.get('/find/:id', authorize, function(req, res, next) {
   });
 });
 
-//DELETE Delete ingredient by ID 
-router.delete('/delete/:id', authorize, function(req, res) {
+//DELETE Delete ingredient by ID <- gives 404 error
+router.put('/delete/:id', authorize, function(req, res) {
   let ingredientId = parseInt(req.params.id);
     models.Ingredients
     .update({Deleted: true},
