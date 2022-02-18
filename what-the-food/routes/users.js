@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var authService = require('../services/auth');
 const { User } = require('../models');
+const cors = require("cors");
+
+router.use(cors());
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -38,6 +41,8 @@ router.get('/logout', function (req, res, next) {
 /* POST Create new user if one doesn't exsist */
 
 router.post('/signup', function (req, res, next) {
+  res.setHeader("Acess-Control-Allow-Origin",  "http://localhost:4200");
+  console.log(req.body)
   User
     .findOrCreate({
       where: {
@@ -47,15 +52,17 @@ router.post('/signup', function (req, res, next) {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         username: req.body.username,
-        password: authService.hashPassword(req.body.password) //<--- Change to this code here
+        password: authService.hashPassword(req.body.password)
+      
       }
     })
-    .then(user => {
-      res.json(user)
-    
-      }).catch(() => {
-        res.status(400).send();
-      });
+    .spread((result, created) => {
+      if (created) {
+        res.json(created);
+      } else {
+        res.send("something went wrong")
+      }
+    })
 
 });
 

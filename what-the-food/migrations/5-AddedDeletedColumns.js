@@ -55,18 +55,18 @@ var migrationCommands = [{
             }
         ]
     },
-    {
-        fn: "addColumn",
-        params: [
-            "Users",
-            "Deleted",
-            {
-                "type": Sequelize.BOOLEAN,
-                "field": "Deleted",
-                "defaultValue": false
-            }
-        ]
-    }
+    // {
+    //     fn: "addColumn",
+    //     params: [
+    //         "Users",
+    //         "Deleted",
+    //         {
+    //             "type": Sequelize.BOOLEAN,
+    //             "field": "Deleted",
+    //             "defaultValue": false
+    //         }
+    //     ]
+    // }
 ];
 
 module.exports = {

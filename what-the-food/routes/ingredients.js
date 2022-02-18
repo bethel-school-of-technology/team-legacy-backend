@@ -83,7 +83,7 @@ router.get('/:id', function(req, res, next) {
 });
 
 //DELETE Delete ingredient by ID <- gives 404 error
-router.delete('/delete/:id', function(req, res) {
+router.put('/delete/:id', function(req, res) {
   let ingredientId = parseInt(req.params.id);
     models.Ingredients
     .update({Deleted: true},

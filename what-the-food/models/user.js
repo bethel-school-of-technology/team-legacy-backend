@@ -38,11 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    Deleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
+    }
   }, {
     sequelize,
     modelName: 'User',
