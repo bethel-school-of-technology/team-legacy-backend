@@ -51,12 +51,12 @@ router.post('/signup', function (req, res, next) {
       }
     })
     .then(user => {
+      user.password = null;
       res.json(user)
     
       }).catch(() => {
         res.status(400).send();
       });
-
 });
 
 /* Login user and return JWT as a cookie */

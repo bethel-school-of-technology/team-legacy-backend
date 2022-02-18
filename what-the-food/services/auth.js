@@ -20,7 +20,8 @@ var authService = {
     verifyUser: function (token) {                              // receive JWT token as parameter
         try {
             let decoded = jwt.verify(token, 'secretkey');       // Decrypt token using same key used to encrypt
-            return User.findByPk(decoded.userId);       // Return result of database query as promise
+           console.log(decoded);
+            return User.findOne({where: {username: decoded.username}});       // Return result of database query as promise
         } catch (err) {
             console.log(err);
             return null;

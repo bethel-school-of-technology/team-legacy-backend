@@ -4,23 +4,26 @@ var authService = require('../services/auth');
 const models = require('../models');
 
 
-// const authorization = (req, res, next) => {
-//   let token = req.cookies.jwt; //req.header.jwt (check with Jan if Andrew or Rickey need something different.)
-//   if (token) {
-//     authService.verifyUser(token)
-//       .then(user => {
-//         if (user) {
-//           res.send(JSON.stringify(user));
-//         } else {
-//           res.status(401);
-//           res.send('Invalid authentication token');
-//         }
-//       });
-//   } else {
-//     res.status(401);
-//     res.send('Must be logged in');
-//   }
-// };
+const authorize = (req, res, next) => {
+  let token = req.cookies.jwt; //req.header.jwt (check with Jan if Andrew or Rickey need something different.)
+  console.log(token)
+  if (token) {
+    authService.verifyUser(token)
+      .then(user => {
+        if (user) {
+          res.locals.user = user;
+          console.log(user)
+          next();
+        } else {
+          res.status(401);
+          res.send('Invalid authentication token');
+        }
+      });
+  } else {
+    res.status(401);
+    res.send('Must be logged in');
+  }
+};
 
 
 // GET list of ingredients in pantry. I want it to be connected to individual user & must be authorized
@@ -58,18 +61,37 @@ router.get('/', function(req, res) {
       });
   });
 
+  //POST User is selecting ingredient for later use in a recipe
+  router.post("/userselectingingredient/:id", authorize, function (req, res, next){
+    let ingredientId = parseInt(req.params.id);
+    models.ingredients_user
+    .findOrCreate({
+      where: { ingredientId: ingredientId, UserId: res.locals.user.UserId },
+      defaults: {
+        ingredientId,
+        UserId: res.locals.user.UserId,
+        ingredient: req.body.ingredient,
+        quantityByUser: req.body.quantityByUser
+      }
+    }).then(
+      res.json({ok: 1})
+    ).catch(error => {
+      res.json({ok: 0, error: error})
+    })
+  });
+
   //PUT to edit ingredients and redirect to ingredients list <- This does work the redirection works but want ingredient by ID)
-  router.put("/edit/:id", function (req, res, next) {
+  router.put("/edit/:id", authorize, function (req, res, next) {
     let ingredientId = parseInt(req.params.id);
     models.Ingredients
       .update(req.body, { where: { ingredientId: ingredientId } })
       .then(
         res.send("The ingredient has been updated."));
-    })
+    });
 
 
 //GET Ingredients by ID <- This does work!!
-router.get('/:id', function(req, res, next) {
+router.get('/find/:id', authorize, function(req, res, next) {
   let ingredientId = parseInt(req.params.id);
   models.Ingredients
   .findOne({
@@ -82,8 +104,8 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
-//DELETE Delete ingredient by ID <- gives 404 error
-router.delete('/delete/:id', function(req, res) {
+//DELETE Delete ingredient by ID 
+router.delete('/delete/:id', authorize, function(req, res) {
   let ingredientId = parseInt(req.params.id);
     models.Ingredients
     .update({Deleted: true},
@@ -92,7 +114,7 @@ router.delete('/delete/:id', function(req, res) {
 });
 
 //GET ALL Recipes:/ingredientId
-router.get('/recipesbyingredient/:id', function(req, res, next) {
+router.get('/recipesbyingredient/:id', authorize, function(req, res, next) {
   console.log('Hi from recipesbyingredient');
   let ingredientId = parseInt(req.params.id);
 
@@ -110,8 +132,40 @@ models.ingredients_recipes.findAll({
   }).then(recipes =>{
     res.json(recipes);
   })
-
 })
+});
+
+console.log('defining Gets /recipesbyuseringredients');
+//GET UserId by ingredients_user will get recipes
+router.get('/recipesbyuseringredients', authorize, function(req, res, next) {
+console.log(res.locals.user)
+  models.ingredients_user.findAll({
+    where: {UserId: res.locals.user.UserId},
+    attributes: ['ingredientId'],
+    raw : true
+  })  
+  .map(result => {
+    console.log(result);
+    return result.ingredientId;
+  })
+  .then(ingredientIds => {
+    console.log(ingredientIds)
+    models.ingredients_recipes.findAll({
+      where: {ingredientId: ingredientIds},
+      attributes: ['recipeId'],
+      raw : true
+    })
+    .map(result => result.recipeId)
+    .then(recipeIds => { 
+      models.Recipes.findAll({
+        where: {
+          recipeId: recipeIds
+        }
+      }).then(recipes =>{
+        res.json(recipes);
+      })
+    })
+  });
 });
 
   module.exports = router;
