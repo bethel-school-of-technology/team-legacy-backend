@@ -75,8 +75,8 @@ router.post('/login', function (req, res, next) {
   }).then(user => {
     if (!user) {
       console.log('User not found')
-      return res.status(401).json({
-        message: "Login Failed"
+      res.send({
+        message: "Login not successful."
       });
     } else {
       let passwordMatch = authService.comparePasswords(req.body.password, user.password);
