@@ -63,7 +63,6 @@ router.post('/signup', function (req, res, next) {
         res.send("something went wrong")
       }
     })
-
 });
 
 /* Login user and return JWT as a cookie */
